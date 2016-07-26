@@ -1,0 +1,15 @@
+---
+app_user: www
+app_user_pass:
+
+mysql_root_pass:
+
+mysql_app_user: www
+mysql_app_user_pass:
+
+timezone: Europe/Amsterdam
+
+php_time_limit: 7200
+php_memory_limit: 1024M
+php_post_limit: 50M
+php_default_locale: de-DE

@@ -1,0 +1,55 @@
+---
+- name: Install PHP 5.6
+  yum: name={{ item }} state=present
+  with_items:
+    - composer
+    - php-cli
+    - php-curl
+    - php-fpm
+    - php-gd
+    - php-intl
+    - php-mbstring
+    - php-mcrypt
+    - php-memcached
+    - php-mysqlnd
+    - php-opcache
+    - php-pdo
+    - php-pear
+    - php-pecl-zip
+    - php-soap
+    - php-xml
+
+- name: Install PHP 7.0
+  yum: name={{ item }} state=present
+  with_items:
+    - php70-php-cli
+    - php70-php-curl
+    - php70-php-fpm
+    - php70-php-gd
+    - php70-php-intl
+    - php70-php-mbstring
+    - php70-php-mcrypt
+    - php70-php-memcached
+    - php70-php-mysqlnd
+    - php70-php-opcache
+    - php70-php-pdo
+    - php70-php-pear
+    - php70-php-pear
+    - php70-php-pecl-xdebug
+    - php70-php-pecl-zip
+    - php70-php-soap
+    - php70-php-xml
+
+- name: Replace PHP-FPM 5.6 configuration
+  template: src=5.6/www.conf dest=/etc/php-fpm.d/
+  notify: restart php-fpm
+
+- name: Replace PHP-FPM 7.0 configuration
+  template: src=7.0/www.conf dest=/etc/opt/remi/php70/php-fpm.d/
+  notify: restart php70-php-fpm
+
+- name: Start and enable PHP-FPM 5.6 service
+  service: name=php-fpm state=started enabled=yes
+
+- name: Start and enable PHP-FPM 7.0 service
+  service: name=php70-php-fpm state=started enabled=yes

@@ -1,0 +1,16 @@
+---
+- name: Install Nginx
+  yum: name=nginx state=present
+
+- name: Replace Nginx configuration
+  template: src=default.conf dest=/etc/nginx/conf.d/default.conf
+  notify: reload nginx
+
+- name: Open port 80
+  firewalld: port=80/tcp permanent=true state=enabled immediate=yes
+
+- name: Open port 443
+  firewalld: port=443/tcp permanent=true state=enabled immediate=yes
+
+- name: Start and enable Nginx service
+  service: name=nginx state=started enabled=yes

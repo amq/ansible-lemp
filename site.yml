@@ -1,0 +1,11 @@
+---
+- name: Install LEMP on CentOS 7
+  user: root
+
+  roles:
+    - swap
+    - sysctl
+    - common
+    - mariadb
+    - nginx
+    - php-fpm

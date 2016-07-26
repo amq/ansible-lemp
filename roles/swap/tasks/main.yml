@@ -1,0 +1,20 @@
+- name: Create swapfile
+  command: dd if=/dev/zero of=/swapfile bs=1M count=1024
+  when: ansible_swaptotal_mb < 1
+  register: swap
+
+- name: Set swapfile permissions
+  file: path=/swapfile mode=600
+  when: swap|changed
+
+- name: Build swapfile
+  command: mkswap /swapfile
+  when: swap|changed
+
+- name: Enable swapfile
+  command: swapon /swapfile
+  when: swap|changed
+
+- name: Mount swapfile on boot
+  mount: name=none src=/swapfile fstype=swap opts=sw passno=0 dump=0 state=present
+  when: swap|changed

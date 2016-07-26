@@ -1,0 +1,70 @@
+---
+- name: Add web user
+  user: name={{ app_user }} password={{ app_user_pass }} state=present
+
+## Repos
+
+- name: Add EPEL repo
+  yum: name=epel-release state=installed
+
+- name: Add Remi repo
+  copy: src=remi.repo dest=/etc/yum.repos.d/
+
+- name: Add Nginx repo
+  copy: src=nginx.repo dest=/etc/yum.repos.d/
+
+- name: Add MariaDB repo
+  copy: src=mariadb.repo dest=/etc/yum.repos.d/
+
+- name: Upgrade all packages
+  yum: name=* state=latest
+
+## Basic packages
+
+- name: Install basic packages
+  yum: name={{ item }} state=present
+  with_items:
+    - nano
+    - wget
+    - net-tools
+    - git
+    - bzip2
+    - unzip
+
+## FirewallD
+
+- name: Install FirewallD
+  yum: name=firewalld state=present
+
+- name: Start and enable firewalld service
+  service: name=firewalld state=started enabled=yes
+
+## NTP
+
+- name: Install NTP
+  yum: name=ntp state=present
+
+- name: Start and enable ntp service
+  service: name=ntp state=started enabled=yes
+
+- name: Set server timezone
+  command: timedatectl set-timezone {{ timezone }}
+
+## SELinux
+
+- name: Disable SELinux
+  selinux: state=disabled
+
+## Auto security updates
+
+- name: Install yum-cron
+  yum: name=yum-cron state=present
+
+- name: Start and enable yum-cron service
+  service: name=yum-cron state=started enabled=yes
+
+- name: Configure auto security updates
+  lineinfile:
+    dest: "/etc/yum/yum-cron.conf"
+    regexp: "^apply_updates = .+"
+    line: "apply_updates = yes"
