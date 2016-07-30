@@ -1,0 +1,12 @@
+---
+- name: Install yum-cron
+  yum: name=yum-cron state=present
+
+- name: Start and enable yum-cron service
+  service: name=yum-cron state=started enabled=yes
+
+- name: Configure auto security updates
+  lineinfile:
+    dest: "/etc/yum/yum-cron.conf"
+    regexp: "^apply_updates = .+"
+    line: "apply_updates = yes"

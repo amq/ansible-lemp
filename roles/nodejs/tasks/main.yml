@@ -1,0 +1,11 @@
+---
+- name: Add nodesource repo
+  yum_repository:
+    name: nodesource
+    baseurl: https://rpm.nodesource.com/pub_{{ nodejs_ver }}/el/7/$basearch
+    gpgkey: https://rpm.nodesource.com/pub/el/NODESOURCE-GPG-SIGNING-KEY-EL
+    gpgcheck: yes
+    enabled: yes
+
+- name: Install nodejs
+  yum: name=nodejs state=present

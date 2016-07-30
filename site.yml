@@ -3,9 +3,15 @@
   user: root
 
   roles:
+    - common
+    - update
+    - auto-updates
     - swap
     - sysctl
-    - common
+    - ntp
     - mariadb
     - nginx
-    - php-fpm
+    - php-global
+    - php-additional
+    - nodejs
+    - redis

@@ -1,21 +1,29 @@
 ---
+- name: Add nginx repo
+  yum_repository:
+    name: nginx
+    baseurl: http://nginx.org/packages/centos/7/$basearch
+    gpgkey: http://nginx.org/keys/nginx_signing.key
+    gpgcheck: yes
+    enabled: yes
+
 - name: Install Nginx
   yum: name=nginx state=present
 
 - name: Create ssl directory for Nginx
-  file: path=/etc/ssl state=directory
+  file: path=/etc/nginx/ssl state=directory
 
 - name: Generate self-signed certificate
-  command: openssl req -new -x509 -nodes -days 3560 -out ssl/own.crt -keyout ssl/own.key -subj "/C=US/ST=New York"
+  command: openssl req -new -x509 -nodes -days 3560 -out own.crt -keyout own.key -subj "/C=US/ST=New York"
   args:
-    chdir: "/etc/nginx/ssl"
-    creates: "/etc/nginx/ssl/own.crt"
+    chdir: /etc/nginx/ssl
+    creates: /etc/nginx/ssl/own.crt
 
 - name: Generate unique Diffie-Hellman group
   command: openssl dhparam -out dhparams.pem 2048
   args:
-    chdir: "/etc/nginx"
-    creates: "/etc/nginx/dhparams.pem"
+    chdir: /etc/nginx
+    creates: /etc/nginx/dhparams.pem
   notify: reload nginx
 
 - name: Replace Nginx configuration

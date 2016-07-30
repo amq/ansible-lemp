@@ -1,32 +1,47 @@
 ---
+- name: Add mariadb repo
+  yum_repository:
+    name: mariadb
+    baseurl: http://yum.mariadb.org/{{ mariadb_ver }}/$basearch
+    gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+    gpgcheck: 1
+    enabled: 1
+
 - name: Install MariaDB packages
   yum: name={{ item }} state=installed
   with_items:
-   - MariaDB-server
-   - MariaDB-client
+    - MariaDB-server
+    - MariaDB-client
+    - MySQL-python
+
+- name: Create MariaDB log directory
+  file: path=/var/log/mariadb state=directory owner=mysql group=mysql mode=0755
 
 - name: Replace MariaDB configuration file
   template: src=server.cnf dest=/etc/my.cnf.d/server.cnf
   notify:
-  - restart mariadb
+    - restart mariadb
 
-- name: Create MariaDB log directory
-  file: path=/var/log/mariadb state=directory owner=mysql group=mysql mode=0775
+- name: Start and enable MariaDB Service
+  service: name=mariadb state=started enabled=yes
 
 - name: Remove MariaDB anonymous users
   mysql_user: name='' host_all=yes state=absent
 
 - name: Remove MariaDB test db
-	mysql_db: name=test state=absent
+  mysql_db: name=test state=absent
+
+- name: Generate MariaDB root password
+  shell: pwgen 20 1
+  register: mysql_root_pass
+  creates: /root/.my.cnf
 
 - name: Set MariaDB root password
-  mysql_user: name=root password={{ mysql_root_pass }} host_all=yes state=present
+  mysql_user: name=root host={{item}} password={{ mysql_root_pass }} state=present
+  with_items:
+    - '::1'
+    - '127.0.0.1'
+    - 'localhost'
 
 - name: Create .my.cnf with MariaDB root credentials
   template: src=.my.cnf dest=/root/.my.cnf owner=root mode=0600
-
-- name: Add MariaDB app user
-  mysql_user: name={{ mysql_app_user }} password={{ mysql_app_user_pass }} priv=*.*:ALL,GRANT state=present
-
-- name: Start and enable MariaDB Service
-  service: name=mariadb state=started enabled=yes

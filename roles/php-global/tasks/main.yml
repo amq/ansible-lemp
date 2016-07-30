@@ -1,0 +1,48 @@
+---
+- name: Add remi repo
+  yum_repository:
+    name: remi
+    mirrorlist: http://rpms.remirepo.net/enterprise/7/remi/mirror
+    gpgkey: http://rpms.remirepo.net/RPM-GPG-KEY-remi
+    gpgcheck: yes
+    enabled: yes
+
+- name: Add remi-{{ php_ver_global }}
+  yum_repository:
+    name: remi-{{ php_ver_global }}
+    mirrorlist: http://rpms.remirepo.net/enterprise/7/{{ php_ver_global }}/mirror
+    gpgkey: http://rpms.remirepo.net/RPM-GPG-KEY-remi
+    gpgcheck: yes
+    enabled: yes
+
+- name: Install {{ php_ver_global }}
+  yum: name={{ item }} state=present
+  with_items:
+    - composer
+    - php-cli
+    - php-curl
+    - php-fpm
+    - php-gd
+    - php-intl
+    - php-mbstring
+    - php-mcrypt
+    - php-memcached
+    - php-mysqlnd
+    - php-opcache
+    - php-pdo
+    - php-pear
+    - php-pecl-redis
+    - php-pecl-zip
+    - php-soap
+    - php-xml
+
+- name: Replace {{ php_ver_global }} FPM pool configuration
+  template: src=www.conf dest=/etc/php-fpm.d/
+  notify: restart php-fpm
+
+- name: Replace {{ php_ver_global }} php.ini configuration
+  template: src=php.ini dest=/etc/
+  notify: restart php-fpm
+
+- name: Start and enable {{ php_ver_global }} FPM service
+  service: name=php-fpm state=started enabled=yes

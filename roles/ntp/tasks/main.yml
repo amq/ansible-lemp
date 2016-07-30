@@ -1,0 +1,9 @@
+---
+- name: Install NTP
+  yum: name=ntp state=present
+
+- name: Start and enable ntpd service
+  service: name=ntpd state=started enabled=yes
+
+- name: Set server timezone
+  command: timedatectl set-timezone {{ timezone }}
