@@ -2,6 +2,7 @@
 - name: Add nginx repo
   yum_repository:
     name: nginx
+    description: nginx
     baseurl: http://nginx.org/packages/centos/7/$basearch
     gpgkey: http://nginx.org/keys/nginx_signing.key
     gpgcheck: yes

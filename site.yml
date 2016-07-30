@@ -1,6 +1,7 @@
 ---
 - name: Install LEMP on CentOS 7
   user: root
+  hosts: local
 
   roles:
     - common

@@ -2,6 +2,7 @@
 - name: Add remi repo
   yum_repository:
     name: remi
+    description: remi
     mirrorlist: http://rpms.remirepo.net/enterprise/7/remi/mirror
     gpgkey: http://rpms.remirepo.net/RPM-GPG-KEY-remi
     gpgcheck: yes
@@ -10,6 +11,7 @@
 - name: Add remi-safe repo
   yum_repository:
     name: remi-safe
+    description: remi-safe
     mirrorlist: http://rpms.remirepo.net/enterprise/7/safe/mirror
     gpgkey: http://rpms.remirepo.net/RPM-GPG-KEY-remi
     gpgcheck: yes
@@ -18,23 +20,23 @@
 - name: Install {{ php_ver_additional }}
   yum: name={{ item }} state=present
   with_items:
-    - {{ php_ver_additional }}-php-cli
-    - {{ php_ver_additional }}-php-curl
-    - {{ php_ver_additional }}-php-fpm
-    - {{ php_ver_additional }}-php-gd
-    - {{ php_ver_additional }}-php-intl
-    - {{ php_ver_additional }}-php-mbstring
-    - {{ php_ver_additional }}-php-mcrypt
-    - {{ php_ver_additional }}-php-memcached
-    - {{ php_ver_additional }}-php-mysqlnd
-    - {{ php_ver_additional }}-php-opcache
-    - {{ php_ver_additional }}-php-pdo
-    - {{ php_ver_additional }}-php-pear
-    - {{ php_ver_additional }}-php-pear
-    - {{ php_ver_additional }}-php-pecl-redis
-    - {{ php_ver_additional }}-php-pecl-zip
-    - {{ php_ver_additional }}-php-soap
-    - {{ php_ver_additional }}-php-xml
+    - "{{ php_ver_additional }}-php-cli"
+    - "{{ php_ver_additional }}-php-curl"
+    - "{{ php_ver_additional }}-php-fpm"
+    - "{{ php_ver_additional }}-php-gd"
+    - "{{ php_ver_additional }}-php-intl"
+    - "{{ php_ver_additional }}-php-mbstring"
+    - "{{ php_ver_additional }}-php-mcrypt"
+    - "{{ php_ver_additional }}-php-memcached"
+    - "{{ php_ver_additional }}-php-mysqlnd"
+    - "{{ php_ver_additional }}-php-opcache"
+    - "{{ php_ver_additional }}-php-pdo"
+    - "{{ php_ver_additional }}-php-pear"
+    - "{{ php_ver_additional }}-php-pear"
+    - "{{ php_ver_additional }}-php-pecl-redis"
+    - "{{ php_ver_additional }}-php-pecl-zip"
+    - "{{ php_ver_additional }}-php-soap"
+    - "{{ php_ver_additional }}-php-xml"
 
 - name: Replace {{ php_ver_additional }} FPM pool configuration
   template: src=www.conf dest=/etc/opt/remi/{{ php_ver_additional }}/php-fpm.d/

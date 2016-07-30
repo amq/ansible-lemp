@@ -2,6 +2,7 @@
 - name: Add remi repo
   yum_repository:
     name: remi
+    description: remi
     mirrorlist: http://rpms.remirepo.net/enterprise/7/remi/mirror
     gpgkey: http://rpms.remirepo.net/RPM-GPG-KEY-remi
     gpgcheck: yes
@@ -10,6 +11,7 @@
 - name: Add remi-{{ php_ver_global }}
   yum_repository:
     name: remi-{{ php_ver_global }}
+    description: remi-{{ php_ver_global }}
     mirrorlist: http://rpms.remirepo.net/enterprise/7/{{ php_ver_global }}/mirror
     gpgkey: http://rpms.remirepo.net/RPM-GPG-KEY-remi
     gpgcheck: yes

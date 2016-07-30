@@ -34,7 +34,8 @@
 - name: Generate MariaDB root password
   shell: pwgen 20 1
   register: mysql_root_pass
-  creates: /root/.my.cnf
+  args:
+    creates: /root/.my.cnf
 
 - name: Set MariaDB root password
   mysql_user: name=root host={{item}} password={{ mysql_root_pass }} state=present
