@@ -25,11 +25,42 @@
   args:
     chdir: /etc/nginx
     creates: /etc/nginx/dhparams.pem
-  notify: reload nginx
 
 - name: Replace Nginx configuration
-  template: src=default.conf dest=/etc/nginx/conf.d/default.conf
+  template: src=nginx.conf dest=/etc/nginx/nginx.conf
   notify: reload nginx
+
+- name: Replace Nginx default virtual host
+  template: src=conf.d/default.conf dest=/etc/nginx/conf.d/default.conf
+  notify: reload nginx
+
+- name: Add Nginx example virtual host
+  template: src=conf.d/site.com dest=/etc/nginx/conf.d/site.com
+  notify: reload nginx
+
+- name: Add Nginx common.conf
+  template: src=common.conf dest=/etc/nginx/common.conf
+  notify: reload nginx
+
+- name: Add Nginx try.conf
+  template: src=try.conf dest=/etc/nginx/try.conf
+  notify: reload nginx
+
+- name: Add Nginx php-fpm.conf
+  template: src=php-fpm.conf dest=/etc/nginx/php-fpm.conf
+  notify: reload nginx
+
+- name: Add Nginx magento.conf
+  template: src=magento.conf dest=/etc/nginx/magento.conf
+  notify: reload nginx
+
+- name: Add CloudFlare IPs (v4) for Nginx
+  shell: curl -s https://www.cloudflare.com/ips-v4 | sed -r 's/^(.+)$/set_real_ip_from \1;/g' > /etc/nginx/cloudflare.conf
+  changed_when: false
+
+- name: Add CloudFlare IPs (v6) for Nginx
+  shell: curl -s https://www.cloudflare.com/ips-v6 | sed -r 's/^(.+)$/set_real_ip_from \1;/g' >> /etc/nginx/cloudflare.conf
+  changed_when: false
 
 - name: Open port 80
   firewalld: port=80/tcp permanent=true state=enabled immediate=yes

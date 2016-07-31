@@ -3,14 +3,14 @@ timezone: Europe/Amsterdam
 
 app_user: www
 
-# For available versions see http://yum.mariadb.org/
+# http://yum.mariadb.org/
 mariadb_ver: 10.1
 
-# For available versions see http://rpms.famillecollet.com/enterprise/7/
+# http://rpms.famillecollet.com/enterprise/7/
 php_ver_global: php56
 php_ver_additional: php70
 
-# For available versions see https://github.com/nodesource/distributions/tree/master/rpm
+# https://github.com/nodesource/distributions/tree/master/rpm
 nodejs_ver: 4.x
 
 php_time_limit: 7200

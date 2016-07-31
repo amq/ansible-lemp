@@ -40,11 +40,11 @@
 
 - name: Replace {{ php_ver_additional }} FPM pool configuration
   template: src=www.conf dest=/etc/opt/remi/{{ php_ver_additional }}/php-fpm.d/
-  notify: restart {{ php_ver_additional }}-php-fpm
+  notify: restart php-fpm-additional
 
 - name: Replace {{ php_ver_additional }} php.ini configuration
   template: src=php.ini dest=/etc/opt/remi/{{ php_ver_additional }}/
-  notify: restart php-fpm
+  notify: restart php-fpm-additional
 
 - name: Start and enable {{ php_ver_additional }} FPM service
   service: name={{ php_ver_additional }}-php-fpm state=started enabled=yes

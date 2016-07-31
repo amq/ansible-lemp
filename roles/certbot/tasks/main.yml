@@ -1,0 +1,15 @@
+---
+- name: Add EPEL repo
+  yum: name=epel-release state=installed
+
+- name: Install Certbot
+  yum: name=certbot state=present
+
+- name: Create Certbot auth directory
+  file: path=/var/www/certbot state=directory
+
+- name: Add Certbot cron job
+  cron:
+    name="Renew Cerbot certificates"
+    minute="0" hour="5" weekday="0"
+    job="certbot renew --quiet && systemctl reload nginx"

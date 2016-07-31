@@ -7,3 +7,4 @@
 
 - name: Set server timezone
   command: timedatectl set-timezone {{ timezone }}
+  changed_when: false

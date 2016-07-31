@@ -1,14 +1,9 @@
 ---
 - name: Add app user
-  user: name={{ app_user }} state=present
+  user: name={{ app_user }} password="{{ lookup('password', '/root/credentials/app_user') }}" state=present
 
 - name: Set app user home directory permissions
   file: path=/home/{{ app_user }} state=directory owner={{ app_user }} group={{ app_user }} mode=0755
-
-# EPEL
-
-- name: Add EPEL repo
-  yum: name=epel-release state=installed
 
 ## Basic packages
 
@@ -21,7 +16,6 @@
     - git
     - bzip2
     - unzip
-    - pwgen
 
 # FirewallD
 
@@ -35,3 +29,4 @@
 
 - name: Disable SELinux
   selinux: state=disabled
+  changed_when: false

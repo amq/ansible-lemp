@@ -1,0 +1,14 @@
+---
+- name: Install Pure-FTPd
+  yum: name=pure-ftpd state=present
+
+- name: Start and enable pure-ftpd service
+  service: name=pure-ftpd state=started enabled=yes
+
+- name: Replace Pure-FTPd configuration file
+  template: src=pure-ftpd.conf dest=/etc/pure-ftpd/pure-ftpd.conf
+  notify:
+    - restart pure-ftpd
+
+- name: Open Pure-FTPd passive port range (30000-50000)
+  firewalld: port=30000-50000/tcp permanent=true state=enabled immediate=yes
