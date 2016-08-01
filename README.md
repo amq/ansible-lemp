@@ -3,21 +3,45 @@
 - Ansible >= 2.1
 - CentOS/RHEL >= 7.0
 
-### To Run
+### How to run
 
 	ansible-playbook -i hosts site.yml
 
-### To generate a certificate
+### Variable location:
 
-	certbot certonly --webroot -w /var/www/certbot -d site.com -d www.site.com"
+	group_vars/all
 
-Then add in /etc/nginx/conf.d/site.com
+### Adding a site
 
+Copy an example virtual host:
+
+	cd /etc/nginx/conf.d
+	cp example.com site.com
+
+Change `server_name` and `root`:
+
+	nano site.com
+
+Reload Nginx:
+
+    systemctl reload nginx
+
+### Generating a certificate
+
+	certbot certonly --webroot -w /var/www/certbot -d site.com -d www.site.com
+
+Add in /etc/nginx/conf.d/site.com
+
+    listen 80;
 	listen 443 ssl;
-	ssl_certificate <cert location>
+	ssl_certificate <cert location>;
 	ssl_certificate_key <key location>;
 
-### To add an FTP user
+Reload Nginx:
+
+    systemctl reload nginx
+
+### Adding an FTP user
 
 	pure-pw useradd <ftp username> -u <system user> -g <system group> -d <directory>
 	pure-pw mkdb
