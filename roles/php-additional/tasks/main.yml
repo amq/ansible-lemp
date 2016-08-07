@@ -17,34 +17,37 @@
     gpgcheck: yes
     enabled: yes
 
-- name: Install {{ php_ver_additional }}
+- name: Install PHP {{ php_ver_additional }}
   yum: name={{ item }} state=present
   with_items:
-    - "{{ php_ver_additional }}-php-cli"
-    - "{{ php_ver_additional }}-php-curl"
-    - "{{ php_ver_additional }}-php-fpm"
-    - "{{ php_ver_additional }}-php-gd"
-    - "{{ php_ver_additional }}-php-intl"
-    - "{{ php_ver_additional }}-php-mbstring"
-    - "{{ php_ver_additional }}-php-mcrypt"
-    - "{{ php_ver_additional }}-php-memcached"
-    - "{{ php_ver_additional }}-php-mysqlnd"
-    - "{{ php_ver_additional }}-php-opcache"
-    - "{{ php_ver_additional }}-php-pdo"
-    - "{{ php_ver_additional }}-php-pear"
-    - "{{ php_ver_additional }}-php-pear"
-    - "{{ php_ver_additional }}-php-pecl-redis"
-    - "{{ php_ver_additional }}-php-pecl-zip"
-    - "{{ php_ver_additional }}-php-soap"
-    - "{{ php_ver_additional }}-php-xml"
+    - "php{{ php_ver_additional | replace('.', '') }}-php-cli"
+    - "php{{ php_ver_additional | replace('.', '') }}-php-curl"
+    - "php{{ php_ver_additional | replace('.', '') }}-php-fpm"
+    - "php{{ php_ver_additional | replace('.', '') }}-php-gd"
+    - "php{{ php_ver_additional | replace('.', '') }}-php-intl"
+    - "php{{ php_ver_additional | replace('.', '') }}-php-mbstring"
+    - "php{{ php_ver_additional | replace('.', '') }}-php-mcrypt"
+    - "php{{ php_ver_additional | replace('.', '') }}-php-memcached"
+    - "php{{ php_ver_additional | replace('.', '') }}-php-mysqlnd"
+    - "php{{ php_ver_additional | replace('.', '') }}-php-opcache"
+    - "php{{ php_ver_additional | replace('.', '') }}-php-pdo"
+    - "php{{ php_ver_additional | replace('.', '') }}-php-pear"
+    - "php{{ php_ver_additional | replace('.', '') }}-php-pear"
+    - "php{{ php_ver_additional | replace('.', '') }}-php-pecl-redis"
+    - "php{{ php_ver_additional | replace('.', '') }}-php-pecl-zip"
+    - "php{{ php_ver_additional | replace('.', '') }}-php-soap"
+    - "php{{ php_ver_additional | replace('.', '') }}-php-xml"
 
-- name: Replace {{ php_ver_additional }} FPM pool configuration
-  template: src=www.conf dest=/etc/opt/remi/{{ php_ver_additional }}/php-fpm.d/
+- name: Replace PHP {{ php_ver_additional }} FPM pool configuration
+  template: src=www.conf dest=/etc/opt/remi/php{{ php_ver_additional | replace('.', '') }}/php-fpm.d/www.conf
   notify: restart php-fpm-additional
 
-- name: Replace {{ php_ver_additional }} php.ini configuration
-  template: src=php.ini dest=/etc/opt/remi/{{ php_ver_additional }}/
+- name: Replace PHP {{ php_ver_additional }} php.ini configuration
+  template: src=php.ini dest=/etc/opt/remi/php{{ php_ver_additional | replace('.', '') }}/php.ini
   notify: restart php-fpm-additional
 
-- name: Start and enable {{ php_ver_additional }} FPM service
-  service: name={{ php_ver_additional }}-php-fpm state=started enabled=yes
+- name: Start and enable PHP {{ php_ver_additional }} FPM service
+  service: name=php{{ php_ver_additional | replace('.', '') }}-php-fpm state=started enabled=yes
+
+- include: ioncube.yml
+  when: php_install_ioncube

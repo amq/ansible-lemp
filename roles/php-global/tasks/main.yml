@@ -8,16 +8,16 @@
     gpgcheck: yes
     enabled: yes
 
-- name: Add remi-{{ php_ver_global }} repo
+- name: Add remi-php{{ php_ver_global | replace('.', '') }} repo
   yum_repository:
-    name: remi-{{ php_ver_global }}
-    description: remi-{{ php_ver_global }}
-    mirrorlist: http://rpms.remirepo.net/enterprise/7/{{ php_ver_global }}/mirror
+    name: remi-php{{ php_ver_global | replace('.', '') }}
+    description: remi-php{{ php_ver_global | replace('.', '') }}
+    mirrorlist: http://rpms.remirepo.net/enterprise/7/php{{ php_ver_global | replace('.', '') }}/mirror
     gpgkey: http://rpms.remirepo.net/RPM-GPG-KEY-remi
     gpgcheck: yes
     enabled: yes
 
-- name: Install {{ php_ver_global }}
+- name: Install PHP {{ php_ver_global }}
   yum: name={{ item }} state=present
   with_items:
     - composer
@@ -38,13 +38,16 @@
     - php-soap
     - php-xml
 
-- name: Replace {{ php_ver_global }} FPM pool configuration
+- name: Replace PHP {{ php_ver_global }} FPM pool configuration
   template: src=www.conf dest=/etc/php-fpm.d/
   notify: restart php-fpm
 
-- name: Replace {{ php_ver_global }} php.ini configuration
+- name: Replace PHP {{ php_ver_global }} php.ini configuration
   template: src=php.ini dest=/etc/
   notify: restart php-fpm
 
-- name: Start and enable {{ php_ver_global }} FPM service
+- name: Start and enable PHP {{ php_ver_global }} FPM service
   service: name=php-fpm state=started enabled=yes
+
+- include: ioncube.yml
+  when: php_install_ioncube

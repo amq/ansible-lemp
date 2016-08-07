@@ -3,7 +3,7 @@
   yum_repository:
     name: mariadb
     description: mariadb
-    baseurl: http://yum.mariadb.org/{{ mariadb_ver }}/$basearch
+    baseurl: http://yum.mariadb.org/{{ mariadb_ver }}/centos7-amd64
     gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
     gpgcheck: 1
     enabled: 1
@@ -26,7 +26,7 @@
 - name: Start and enable MariaDB Service
   service: name=mariadb state=started enabled=yes
 
-- name: Remove MariaDB anonymous users
+- name: Remove MariaDB anonymous user
   mysql_user: name='' host_all=yes state=absent
 
 - name: Remove MariaDB test db
@@ -50,4 +50,4 @@
     - 'localhost'
 
 - name: Create .my.cnf with MariaDB root credentials
-  template: src=.my.cnf dest=/root/.my.cnf owner=root mode=0600
+  template: src=.my.cnf dest=/root/.my.cnf mode=0600

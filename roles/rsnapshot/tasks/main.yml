@@ -1,0 +1,27 @@
+---
+- name: Add EPEL repo
+  yum: name=epel-release state=installed
+
+- name: Install Rsnapshot
+  yum: name=rsnapshot state=present
+
+- name: Replace Rsnapshot configuration file
+  template: src=rsnapshot.conf dest=/etc/rsnapshot.conf
+
+- name: Create Rsnapshot user configuration directory
+  file: path=/etc/rsnapshot.d state=directory
+
+- name: Add Rsnapshot user configuration file
+  template: src=daily.conf dest=/etc/rsnapshot.d/daily.conf
+
+- name: Add MySQL backup script
+  template: src=mysql-backup.sh dest=/usr/local/bin/mysql-backup.sh mode=0755
+
+- name: Create backup directory
+  file: path={{ backup_directory }} state=directory mode=0700
+
+- name: Add Rsnapshot backup cron job
+  cron:
+    name="Rsnapshot daily backup"
+    minute="0" hour="4"
+    job="rsnapshot -c /etc/rsnapshot.d/daily.conf daily"

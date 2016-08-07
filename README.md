@@ -7,7 +7,7 @@
 
 	ansible-playbook -i hosts site.yml
 
-### Variable location:
+### Variables location:
 
 	group_vars/all
 
@@ -26,7 +26,12 @@ Reload Nginx:
 
     systemctl reload nginx
 
-### Generating a certificate
+### Setting HTTP auth for a site
+
+    cd /home/<user>/<site>/htdocs
+    printf "dev:$(openssl passwd -crypt letmein)\n" >> .htpasswd
+
+### Generating an HTTPS certificate
 
 	certbot certonly --webroot -w /var/www/certbot -d site.com -d www.site.com
 
@@ -34,6 +39,7 @@ Add in /etc/nginx/conf.d/site.com
 
     listen 80;
 	listen 443 ssl;
+
 	ssl_certificate <cert location>;
 	ssl_certificate_key <key location>;
 
@@ -45,4 +51,8 @@ Reload Nginx:
 
 	pure-pw useradd <ftp username> -u <system user> -g <system group> -d <directory>
 	pure-pw mkdb
-	systemctl reload pure-ftpd
+	systemctl restart pure-ftpd
+
+### phpmyadmin
+
+	<ip>:8001

@@ -10,5 +10,5 @@
   notify:
     - restart pure-ftpd
 
-- name: Open Pure-FTPd passive port range (30000-50000)
-  firewalld: port=30000-50000/tcp permanent=true state=enabled immediate=yes
+- name: Open Pure-FTPd passive port range (30000-35000)
+  firewalld: port=30000-35000/tcp permanent=true state=enabled immediate=yes

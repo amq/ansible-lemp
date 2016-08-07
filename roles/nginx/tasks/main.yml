@@ -3,7 +3,7 @@
   yum_repository:
     name: nginx
     description: nginx
-    baseurl: http://nginx.org/packages/centos/7/$basearch
+    baseurl: http://nginx.org/packages/mainline/centos/7/$basearch
     gpgkey: http://nginx.org/keys/nginx_signing.key
     gpgcheck: yes
     enabled: yes
@@ -35,7 +35,11 @@
   notify: reload nginx
 
 - name: Add Nginx example virtual host
-  template: src=conf.d/site.com dest=/etc/nginx/conf.d/site.com
+  template: src=conf.d/example.com dest=/etc/nginx/conf.d/example.com
+  notify: reload nginx
+
+- name: Add Nginx phpMyAdmin virtual host
+  template: src=conf.d/phpmyadmin dest=/etc/nginx/conf.d/phpmyadmin
   notify: reload nginx
 
 - name: Add Nginx common.conf
@@ -62,11 +66,14 @@
   shell: curl -s https://www.cloudflare.com/ips-v6 | sed -r 's/^(.+)$/set_real_ip_from \1;/g' >> /etc/nginx/cloudflare.conf
   changed_when: false
 
-- name: Open port 80
+- name: Open port 80 (HTTP)
   firewalld: port=80/tcp permanent=true state=enabled immediate=yes
 
-- name: Open port 443
+- name: Open port 443 (HTTPS)
   firewalld: port=443/tcp permanent=true state=enabled immediate=yes
+
+- name: Open port 8001 (phpMyAdmin)
+  firewalld: port=8001/tcp permanent=true state=enabled immediate=yes
 
 - name: Start and enable Nginx service
   service: name=nginx state=started enabled=yes

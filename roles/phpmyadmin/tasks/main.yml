@@ -1,0 +1,6 @@
+---
+- name: Add EPEL repo
+  yum: name=epel-release state=installed
+
+- name: Install phpMyAdmin
+  yum: name=phpmyadmin state=present

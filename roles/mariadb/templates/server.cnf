@@ -14,14 +14,14 @@ collation_server        = utf8_unicode_ci
 init_connect            = 'SET NAMES utf8'
 character_set_server    = utf8
 
-max_connections         = 32
-thread_cache_size       = 32
+max_connections         = {{ mysql_max_connections }}
+thread_cache_size       = {{ mysql_max_connections }}
 key_buffer_size         = 128M
 max_allowed_packet      = 128M
 tmp_table_size          = 128M
 max_heap_table_size     = 128M
 join_buffer_size        = 4M
-innodb_buffer_pool_size = {{ (ansible_memtotal_mb / 3) | int }}M
+innodb_buffer_pool_size = {{ mysql_innodb_buffer_pool_size }}
 
 query_cache_type        = 0
 low_priority_updates    = 1

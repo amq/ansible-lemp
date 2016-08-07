@@ -1,3 +1,3 @@
 ---
 - name: restart php-fpm-additional
-  service: name={{ php_ver_additional }}-php-fpm state=restarted
+  service: name=php{{ php_ver_additional | replace('.', '') }}-php-fpm state=restarted

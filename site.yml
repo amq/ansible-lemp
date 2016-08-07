@@ -4,17 +4,27 @@
   hosts: local
 
   roles:
+    # general
     - common
     - update
     - auto-updates
     - swap
     - sysctl
-    - ntp
+    - chrony
+
+    # web server
     - mariadb
     - nginx
     - php-global
     - php-additional
+    - phpmyadmin
+    # - hhvm
+    - pure-ftpd
+
+    # backups
+    - rsnapshot
+
+    # extras
     - nodejs
     - redis
     - certbot
-    - pure-ftpd

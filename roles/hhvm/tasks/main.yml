@@ -1,0 +1,39 @@
+---
+- name: Add linuxeye-hhvm repo
+  yum_repository:
+    name: linuxeye-hhvm
+    description: linuxeye-hhvm
+    baseurl: http://mirrors.linuxeye.com/hhvm-repo/7/$basearch
+    gpgcheck: no
+    enabled: no
+
+- name: Install HHVM
+  yum: name=hhvm state=present enablerepo=linuxeye-hhvm
+
+- name: Create HHVM db directory
+  file: path=/var/lib/hhvm state=directory owner={{ app_user }} group={{ app_user }}
+
+- name: Create HHVM log directory
+  file: path=/var/log/hhvm state=directory owner={{ app_user }} group={{ app_user }}
+
+- name: Create HHVM run directory
+  file: path=/var/run/hhvm state=directory owner={{ app_user }} group={{ app_user }}
+
+- name: Replace HHVM php.ini configuration
+  template: src=php.ini dest=/etc/hhvm/php.ini
+  notify: restart hhvm
+
+- name: Replace HHVM server.ini configuration
+  template: src=server.ini dest=/etc/hhvm/server.ini
+  notify: restart hhvm
+
+- name: Add HHVM tmpfiles.d configuration
+  template: src=hhvm.conf dest=/usr/lib/tmpfiles.d/hhvm.conf
+  notify: reload systemd
+
+- name: Replace HHVM service file
+  template: src=hhvm.service dest=/etc/systemd/system/hhvm.service
+  notify: reload systemd
+
+- name: Start and enable hhvm service
+  service: name=hhvm state=started enabled=yes

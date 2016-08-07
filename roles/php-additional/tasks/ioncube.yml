@@ -1,0 +1,36 @@
+---
+- name: Download ionCube Loader for PHP {{ php_ver_additional }}
+  get_url:
+    url=http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64_5.1.2.tar.gz
+    dest=/tmp/ioncube-{{ php_ver_additional }}.tar.gz
+  when: php_ver_additional != "7.0"
+
+- name: Download ionCube Loader for PHP {{ php_ver_additional }}
+  get_url:
+    url=https://www.ioncube.com/php7-linux-x86-64-beta8.tgz
+    dest=/tmp/ioncube-{{ php_ver_additional }}.tar.gz
+  when: php_ver_additional == "7.0"
+
+- name: Extract ionCube Loader for PHP {{ php_ver_additional }}
+  unarchive:
+    src=/tmp/ioncube-{{ php_ver_additional }}.tar.gz
+    dest=/tmp
+    copy=no
+
+- name: Install ionCube Loader for PHP {{ php_ver_additional }}
+  copy:
+    src=/tmp/ioncube/ioncube_loader_lin_{{ php_ver_additional }}.so
+    dest=/opt/remi/php{{ php_ver_additional | replace('.', '') }}/root/usr/lib64/php/modules/ioncube_loader_lin_{{ php_ver_additional }}.so
+  when: php_ver_additional != "7.0"
+  notify: restart php-fpm-additional
+
+- name: Install ionCube Loader for PHP {{ php_ver_additional }}
+  copy:
+    src=/tmp/ioncube_loader_lin_x86-64_{{ php_ver_additional }}b8.so
+    dest=/opt/remi/php{{ php_ver_additional | replace('.', '') }}/root/usr/lib64/php/modules/ioncube_loader_lin_{{ php_ver_additional }}.so
+  when: php_ver_additional == "7.0"
+  notify: restart php-fpm-additional
+
+- name: Enable ionCube Loader for PHP {{ php_ver_global }}
+  template: src=ioncube.ini dest=/etc/opt/remi/php{{ php_ver_additional | replace('.', '') }}/php.d/00-ioncube.ini
+  notify: restart php-fpm-additional

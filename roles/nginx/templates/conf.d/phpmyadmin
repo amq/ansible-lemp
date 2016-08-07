@@ -1,0 +1,18 @@
+server {
+        listen 8001 ssl;
+        root /usr/share/phpMyAdmin;
+
+        ssl_certificate /etc/nginx/ssl/own.crt;
+        ssl_certificate_key /etc/nginx/ssl/own.key;
+
+        set $php_engine php{{ php_ver_global | replace('.', '') }};
+
+        error_page 497 https://$http_host$request_uri;
+
+        location = /robots.txt {
+                return 200 "User-agent: *\nDisallow: /\n";
+        }
+
+        include common.conf;
+        include php-fpm.conf;
+}

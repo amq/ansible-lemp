@@ -1,4 +1,18 @@
 ---
+# Timezone
+
+- name: Set server timezone
+  command: timedatectl set-timezone {{ timezone }}
+  changed_when: false
+
+# Hostname
+
+- name: Set server hostname
+  command: hostnamectl set-hostname {{ hostname }}
+  changed_when: false
+
+# App user
+
 - name: Add app user
   user: name={{ app_user }} state=present
 
@@ -30,3 +44,4 @@
 - name: Disable SELinux
   selinux: state=disabled
   changed_when: false
+  # check if permanent

@@ -1,19 +1,40 @@
 ---
-timezone: Europe/Amsterdam
+timezone: "Europe/Amsterdam"
 
-app_user: www
+hostname: "example.com"
+
+app_user: "www"
 
 # http://yum.mariadb.org/
-mariadb_ver: 10.1
+mariadb_ver: "10.1"
 
 # http://rpms.famillecollet.com/enterprise/7/
-php_ver_global: php56
-php_ver_additional: php70
+php_ver_global: "5.6"
+php_ver_additional: "7.0"
 
 # https://github.com/nodesource/distributions/tree/master/rpm
-nodejs_ver: 4.x
+nodejs_ver: "4.x"
 
-php_time_limit: 7200
-php_memory_limit: 1024M
-php_post_limit: 50M
-php_default_locale: de-DE
+request_time_limit: "3600"
+request_post_limit: "50M"
+max_backend_rps_per_ip: "5"
+
+php_max_children: "{{ [ansible_processor_vcpus * 2.5, 5] | max | int }}"
+php_memory_limit: "{{ [(ansible_memtotal_mb / 4), 1000] | min | int }}M"
+php_max_input_vars: "10000"
+php_display_errors: "Off"
+php_error_reporting: "E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED"
+php_default_locale: "de-DE"
+
+# isolates virtual hosts from each other, but reduces performance
+php_enable_open_basedir: no
+
+php_install_ioncube: no
+
+mysql_max_connections: "{{ (ansible_memtotal_mb / 80) | int }}"
+mysql_innodb_buffer_pool_size: "{{ (ansible_memtotal_mb / 5) | int }}M"
+
+backup_directory: "/backup"
+daily_backups: "7"
+
+swap_size: "1024M"

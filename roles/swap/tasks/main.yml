@@ -1,5 +1,5 @@
 - name: Create swapfile
-  command: dd if=/dev/zero of=/swapfile bs=1M count=1024
+  command: dd if=/dev/zero of=/swapfile bs={{ swap_size }} count=1
   when: ansible_swaptotal_mb < 1
   register: swap
 

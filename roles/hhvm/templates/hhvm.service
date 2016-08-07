@@ -1,0 +1,8 @@
+[Unit]
+Description=HHVM HipHop Virtual Machine (FCGI)
+
+[Service]
+ExecStart=/usr/local/bin/hhvm -c /etc/hhvm/server.ini -c /etc/hhvm/php.ini -m daemon
+
+[Install]
+WantedBy=multi-user.target
