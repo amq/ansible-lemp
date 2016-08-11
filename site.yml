@@ -4,7 +4,7 @@
   hosts: local
 
   roles:
-    # general
+  # general
     - common
     - update
     - auto-updates
@@ -12,7 +12,7 @@
     - sysctl
     - chrony
 
-    # web server
+  # web server
     - mariadb
     - nginx
     - php-global
@@ -21,10 +21,10 @@
     # - hhvm
     - pure-ftpd
 
-    # backups
+  # backups
     - rsnapshot
 
-    # extras
+  # extras
     - nodejs
     - redis
     - certbot

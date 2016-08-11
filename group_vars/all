@@ -19,7 +19,7 @@ request_time_limit: "3600"
 request_post_limit: "50M"
 max_backend_rps_per_ip: "5"
 
-php_max_children: "{{ [ansible_processor_vcpus * 2.5, 5] | max | int }}"
+php_max_children: "{{ [ansible_processor_vcpus * 4, 8] | max | int }}"
 php_memory_limit: "{{ [(ansible_memtotal_mb / 4), 1000] | min | int }}M"
 php_max_input_vars: "10000"
 php_display_errors: "Off"
@@ -31,7 +31,7 @@ php_enable_open_basedir: no
 
 php_install_ioncube: no
 
-mysql_max_connections: "{{ (ansible_memtotal_mb / 80) | int }}"
+mysql_max_connections: "{{ [(ansible_memtotal_mb / 64), 100] | min | int }}"
 mysql_innodb_buffer_pool_size: "{{ (ansible_memtotal_mb / 5) | int }}M"
 
 backup_directory: "/backup"
